@@ -8,8 +8,47 @@ datasource db {
   provider = "postgresql"
 }
 
-model profiles {
-    id Int @id @default(autoincrement())
+model Profile {
+    id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
     name String
+    description String
+    links String[]
+    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+    jobs Job[]
+
+    @@map("profiles")
 }
 
+// model Skill {
+//     id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+//     name String
+//     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+//     @@map("skills")
+// }
+
+model Job {
+    id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    name String
+    jobTitle String @map("job_title")
+    dateStart DateTime @map("date_start") @db.Timestamptz()
+    dateEnd DateTime? @map("date_end") @db.Timestamptz()
+    achievements String
+    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+    profileId String @map("profile_id") @db.Uuid
+
+    profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+    @@index([profileId])
+    @@map("jobs")
+}
+
+// model Project {
+//     id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+//     name String
+//     link String?
+//     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+//     @@map("projects")
+// }

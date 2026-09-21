@@ -23,6 +23,7 @@ import { PrismaModule } from '../prisma/prisma.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
       playground: true,
+      includeStacktraceInErrorResponses: false,
     }),
   ],
 })

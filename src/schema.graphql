@@ -5,8 +5,51 @@
 type Profile {
   id: ID!
   name: String!
+  description: String!
+  links: [String!]!
+  createdAt: DateTime!
+  jobs: [Job!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Job {
+  id: ID!
+  name: String!
+  jobTitle: String!
+  dateStart: DateTime!
+  dateEnd: DateTime
+  achievements: String!
+  createdAt: DateTime!
+  profile: Profile!
 }
 
 type Query {
   profiles: [Profile!]!
+  profile(id: String!): Profile!
+  jobs: [Job!]!
+  job(id: String!): Job!
+}
+
+type Mutation {
+  createProfile(data: CreateProfileInput!): Profile!
+  createJob(data: CreateJobInput!): Job!
+}
+
+input CreateProfileInput {
+  name: String!
+  description: String!
+  links: [String!]
+}
+
+input CreateJobInput {
+  name: String!
+  jobTitle: String!
+  dateStart: DateTime!
+  dateEnd: DateTime
+  achievements: String!
+  profileId: ID!
 }
