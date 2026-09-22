@@ -6,12 +6,13 @@ import {
   ResolveField,
   Parent,
   Context,
+  ID,
 } from '@nestjs/graphql';
 import { ParseUUIDPipe } from '@nestjs/common';
 
 import { Job } from '../models';
 import { JobsService } from '../services';
-import { CreateJobInput } from '../dto';
+import { CreateJobInput, UpdateJobInput } from '../dto';
 import { ProfileByIdLoader, SkillsByJobIdLoader } from '../../loaders';
 import { Skill } from '../../skills/models';
 import { Profile } from '../../profiles/models';
@@ -30,13 +31,26 @@ export class JobsResolver {
   }
 
   @Query(() => Job, { name: 'job', nullable: true })
-  find(@Args('id', ParseUUIDPipe) id: string) {
+  find(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.jobsService.findOne(id);
   }
 
   @Mutation(() => Job, { name: 'createJob' })
   addJob(@Args('data') data: CreateJobInput) {
     return this.jobsService.create(data);
+  }
+
+  @Mutation(() => Job, { name: 'updateJob' })
+  updateJob(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @Args('data') data: UpdateJobInput,
+  ) {
+    return this.jobsService.update(id, data);
+  }
+
+  @Mutation(() => Job, { name: 'deleteJob' })
+  deleteJob(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
+    return this.jobsService.delete(id);
   }
 
   @ResolveField(() => Profile)

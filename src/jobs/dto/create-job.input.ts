@@ -24,7 +24,7 @@ export class CreateJobInput {
   @IsDate()
   dateStart!: Date;
 
-  @Field({ nullable: true })
+  @Field(() => Date, { nullable: true })
   @IsDate()
   @ValidateBy({
     validator: {
@@ -40,7 +40,7 @@ export class CreateJobInput {
     name: 'test',
   })
   @IsOptional()
-  dateEnd?: Date;
+  dateEnd?: Date | null;
 
   @Field()
   @IsString()

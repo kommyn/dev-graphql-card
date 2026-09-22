@@ -8,10 +8,10 @@ export class CreateProjectInput {
   @IsNotEmpty()
   name!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   @IsString()
   @IsOptional()
-  link?: string;
+  link?: string | null;
 
   @Field()
   @IsUUID()

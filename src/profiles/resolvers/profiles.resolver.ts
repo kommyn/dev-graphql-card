@@ -6,6 +6,7 @@ import {
   ResolveField,
   Parent,
   Context,
+  ID,
 } from '@nestjs/graphql';
 import { ParseUUIDPipe } from '@nestjs/common';
 
@@ -17,7 +18,7 @@ import {
   SkillsByProfileId,
   AllProfileSkillsLoader,
 } from '../../loaders';
-import { CreateProfileInput } from '../dto';
+import { CreateProfileInput, UpdateProfileInput } from '../dto';
 import { Job } from '../../jobs/models';
 import { Project } from '../../projects/models';
 import { Skill } from 'src/skills/models';
@@ -38,13 +39,26 @@ export class ProfilesResolver {
   }
 
   @Query(() => Profile, { name: 'profile', nullable: true })
-  find(@Args('id', ParseUUIDPipe) id: string) {
+  find(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.profilesService.findOne(id);
   }
 
   @Mutation(() => Profile, { name: 'createProfile' })
   createProfile(@Args('data') data: CreateProfileInput) {
     return this.profilesService.create(data);
+  }
+
+  @Mutation(() => Profile, { name: 'updateProfile' })
+  updateProfile(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @Args('data') data: UpdateProfileInput,
+  ) {
+    return this.profilesService.update(id, data);
+  }
+
+  @Mutation(() => Profile, { name: 'deleteProfile' })
+  deleteProfile(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
+    return this.profilesService.delete(id);
   }
 
   @ResolveField(() => [Job])

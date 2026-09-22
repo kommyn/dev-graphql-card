@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GraphQLError } from 'graphql/error';
 
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateJobInput } from '../dto';
+import { CreateJobInput, UpdateJobInput } from '../dto';
 
 @Injectable()
 export class JobsService {
@@ -27,6 +27,34 @@ export class JobsService {
         profile: { connect: { id: data.profileId } },
       },
     });
+  }
+
+  async update(id: string, data: UpdateJobInput) {
+    const existingJob = await this.prismaService.job.findUnique({
+      where: { id },
+    });
+    if (!existingJob)
+      throw new GraphQLError('Job not found', {
+        extensions: { code: 'NOT_FOUND' },
+      });
+
+    if (!Object.keys(data).length) return existingJob;
+
+    if (data.dateEnd && data.dateEnd < existingJob.dateStart) {
+      throw new GraphQLError(
+        "End date of the job cannot be lesser than it's start date'",
+        { extensions: { code: 'BAD_USER_INPUT' } },
+      );
+    }
+
+    return this.prismaService.job.update({
+      where: { id },
+      data,
+    });
+  }
+
+  delete(id: string) {
+    return this.prismaService.job.delete({ where: { id } });
   }
 
   async addSkillToJob(jobId: string, skillId: string) {

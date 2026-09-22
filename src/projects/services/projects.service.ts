@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateProjectInput } from '../dto';
+import { CreateProjectInput, UpdateProjectInput } from '../dto';
+import { GraphQLError } from 'graphql/error';
 
 @Injectable()
 export class ProjectsService {
@@ -23,5 +24,29 @@ export class ProjectsService {
         profile: { connect: { id: data.profileId } },
       },
     });
+  }
+
+  async update(id: string, data: UpdateProjectInput) {
+    const existingProject = await this.prismaService.project.findUnique({
+      where: { id },
+    });
+    if (!existingProject)
+      throw new GraphQLError('Project not found', {
+        extensions: { code: 'NOT_FOUND' },
+      });
+
+    if (!Object.keys(data).length) return existingProject;
+
+    return this.prismaService.project.update({
+      where: { id },
+      data: {
+        name: data.name,
+        link: data.link,
+      },
+    });
+  }
+
+  delete(id: string) {
+    return this.prismaService.project.delete({ where: { id } });
   }
 }

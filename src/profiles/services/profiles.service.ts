@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateProfileInput } from '../dto';
+import { CreateProfileInput, UpdateProfileInput } from '../dto';
 import { GraphQLError } from 'graphql/error';
 
 @Injectable()
@@ -23,9 +23,34 @@ export class ProfilesService {
       data: {
         name: data.name,
         description: data.description,
-        links: data.links,
+        links: data.links || [],
       },
     });
+  }
+
+  async update(id: string, data: UpdateProfileInput) {
+    const existingProfile = await this.prismaService.profile.findUnique({
+      where: { id },
+    });
+    if (!existingProfile)
+      throw new GraphQLError('Profile not found', {
+        extensions: { code: 'NOT_FOUND' },
+      });
+
+    if (!Object.keys(data).length) return existingProfile;
+
+    return this.prismaService.profile.update({
+      where: { id },
+      data: {
+        name: data.name,
+        description: data.description,
+        links: data.links || [],
+      },
+    });
+  }
+
+  delete(id: string) {
+    return this.prismaService.profile.delete({ where: { id } });
   }
 
   async addSkillToProfile(profileId: string, skillId: string) {

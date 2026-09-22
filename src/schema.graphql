@@ -47,30 +47,43 @@ type Skill {
 
 type Query {
   profiles: [Profile!]!
-  profile(id: String!): Profile
+  profile(id: ID!): Profile
   jobs: [Job!]!
-  job(id: String!): Job
+  job(id: ID!): Job
   projects: [Project!]!
-  project(id: String!): Project
+  project(id: ID!): Project
   skills: [Skill!]!
-  skill(id: String!): Skill!
+  skill(id: ID!): Skill
 }
 
 type Mutation {
   createProfile(data: CreateProfileInput!): Profile!
+  updateProfile(id: ID!, data: UpdateProfileInput!): Profile!
+  deleteProfile(id: ID!): Profile!
   addSkillToProfile(data: ChangeProfileSkillInput!): Profile!
   removeSkillFromProfile(data: ChangeProfileSkillInput!): Profile!
   createJob(data: CreateJobInput!): Job!
+  updateJob(id: ID!, data: UpdateJobInput!): Job!
+  deleteJob(id: ID!): Job!
   addSkillToJob(data: ChangeJobSkillInput!): Job!
   removeSkillFromJob(data: ChangeJobSkillInput!): Job!
   createProject(data: CreateProjectInput!): Project!
+  updateProject(id: ID!, data: UpdateProjectInput!): Project!
+  deleteProject(id: ID!): Project!
   createSkill(data: CreateSkillInput!): Skill!
-  deleteSkill(id: String!): Skill!
+  updateSkill(id: ID!, data: UpdateSkillInput!): Skill!
+  deleteSkill(id: ID!): Skill!
 }
 
 input CreateProfileInput {
   name: String!
   description: String!
+  links: [String!]
+}
+
+input UpdateProfileInput {
+  name: String
+  description: String
   links: [String!]
 }
 
@@ -88,6 +101,14 @@ input CreateJobInput {
   profileId: ID!
 }
 
+input UpdateJobInput {
+  name: String
+  jobTitle: String
+  dateStart: DateTime
+  dateEnd: DateTime
+  achievements: String
+}
+
 input ChangeJobSkillInput {
   jobId: ID!
   skillId: ID!
@@ -99,6 +120,15 @@ input CreateProjectInput {
   profileId: String!
 }
 
+input UpdateProjectInput {
+  name: String
+  link: String
+}
+
 input CreateSkillInput {
   name: String!
+}
+
+input UpdateSkillInput {
+  name: String
 }
