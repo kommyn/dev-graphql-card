@@ -6,7 +6,6 @@ import { join } from 'node:path';
 
 import * as config from './config';
 import { validationSchema } from './validation-schema';
-import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [
@@ -18,12 +17,11 @@ import { PrismaModule } from '../prisma/prisma.module';
         abortEarly: true,
       },
     }),
-    PrismaModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
-      playground: true,
       includeStacktraceInErrorResponses: false,
+      graphiql: true,
     }),
   ],
 })
