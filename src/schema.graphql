@@ -9,6 +9,7 @@ type Profile {
   links: [String!]!
   createdAt: DateTime!
   jobs: [Job!]!
+  projects: [Project!]!
 }
 
 """
@@ -27,16 +28,27 @@ type Job {
   profile: Profile!
 }
 
+type Project {
+  id: ID!
+  name: String!
+  link: String
+  createdAt: DateTime!
+  profile: Profile!
+}
+
 type Query {
   profiles: [Profile!]!
-  profile(id: String!): Profile!
+  profile(id: String!): Profile
   jobs: [Job!]!
-  job(id: String!): Job!
+  job(id: String!): Job
+  projects: [Project!]!
+  project(id: String!): Project
 }
 
 type Mutation {
   createProfile(data: CreateProfileInput!): Profile!
   createJob(data: CreateJobInput!): Job!
+  createProject(data: CreateProjectInput!): Project!
 }
 
 input CreateProfileInput {
@@ -52,4 +64,10 @@ input CreateJobInput {
   dateEnd: DateTime
   achievements: String!
   profileId: ID!
+}
+
+input CreateProjectInput {
+  name: String!
+  link: String
+  profileId: String!
 }

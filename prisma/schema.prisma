@@ -16,6 +16,7 @@ model Profile {
     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
     jobs Job[]
+    projects Project[]
 
     @@map("profiles")
 }
@@ -44,11 +45,15 @@ model Job {
     @@map("jobs")
 }
 
-// model Project {
-//     id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-//     name String
-//     link String?
-//     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+model Project {
+    id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    name String
+    link String?
+    createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+    profileId String @map("profile_id") @db.Uuid
 
-//     @@map("projects")
-// }
+    profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+    @@index([profileId])
+    @@map("projects")
+}

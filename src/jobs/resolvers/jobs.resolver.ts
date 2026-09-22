@@ -25,7 +25,7 @@ export class JobsResolver {
     return this.jobsService.findAll();
   }
 
-  @Query(() => Job, { name: 'job' })
+  @Query(() => Job, { name: 'job', nullable: true })
   find(@Args('id') id: string) {
     return this.jobsService.findOne(id);
   }
