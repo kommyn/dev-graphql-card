@@ -5,19 +5,20 @@ import {
   Args,
   ResolveField,
   Parent,
+  Context,
 } from '@nestjs/graphql';
 
 import { Job } from '../models';
 import { JobsService } from '../services';
 import { CreateJobInput } from '../dto';
+import { ProfileByIdLoader } from '../../loaders';
 import { Profile } from '../../profiles/models';
-import { PrismaService } from '../../prisma/prisma.service';
 
 @Resolver(() => Job)
 export class JobsResolver {
   constructor(
     private readonly jobsService: JobsService,
-    private readonly prismaService: PrismaService,
+    private readonly profileByIdLoader: ProfileByIdLoader,
   ) {}
 
   @Query(() => [Job], { name: 'jobs' })
@@ -35,11 +36,8 @@ export class JobsResolver {
     return this.jobsService.create(data);
   }
 
-  // TODO: Solve N+1 issue
   @ResolveField(() => Profile)
-  profile(@Parent() job: Job) {
-    return this.prismaService.profile.findUnique({
-      where: { id: job.profileId },
-    });
+  profile(@Parent() job: Job, @Context() ctx: object) {
+    return this.profileByIdLoader.load(ctx, job.profileId);
   }
 }

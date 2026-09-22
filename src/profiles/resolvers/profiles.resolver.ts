@@ -5,20 +5,25 @@ import {
   Args,
   ResolveField,
   Parent,
+  Context,
 } from '@nestjs/graphql';
 
 import { ProfilesService } from '../services';
 import { Profile } from '../models';
-import { PrismaService } from '../../prisma/prisma.service';
+import {
+  JobsByProfileIdLoader,
+  ProjectsByProfileIdLoader,
+} from '../../loaders';
 import { CreateProfileInput } from '../dto';
-import { Job } from 'src/jobs/models';
-import { Project } from 'src/projects/models';
+import { Job } from '../../jobs/models';
+import { Project } from '../../projects/models';
 
 @Resolver(() => Profile)
 export class ProfilesResolver {
   constructor(
     private readonly profilesService: ProfilesService,
-    private readonly prismaService: PrismaService,
+    private readonly jobsByProfileIdLoader: JobsByProfileIdLoader,
+    private readonly projectsByProfileIdLoader: ProjectsByProfileIdLoader,
   ) {}
 
   @Query(() => [Profile], { name: 'profiles' })
@@ -36,19 +41,13 @@ export class ProfilesResolver {
     return this.profilesService.create(data);
   }
 
-  // TODO: Solve N+1 issue
   @ResolveField(() => [Job])
-  jobs(@Parent() profile: Profile) {
-    return this.prismaService.job.findMany({
-      where: { profile: { id: profile.id } },
-    });
+  jobs(@Parent() profile: Profile, @Context() ctx: object) {
+    return this.jobsByProfileIdLoader.load(ctx, profile.id);
   }
 
-  // TODO: Solve N+1 issue
   @ResolveField(() => [Project])
-  projects(@Parent() profile: Profile) {
-    return this.prismaService.project.findMany({
-      where: { profile: { id: profile.id } },
-    });
+  projects(@Parent() profile: Profile, @Context() ctx: object) {
+    return this.projectsByProfileIdLoader.load(ctx, profile.id);
   }
 }

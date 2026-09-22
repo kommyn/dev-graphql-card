@@ -5,19 +5,20 @@ import {
   Mutation,
   ResolveField,
   Parent,
+  Context,
 } from '@nestjs/graphql';
 
 import { Project } from '../models';
 import { ProjectsService } from '../services';
+import { ProfileByIdLoader } from '../../loaders';
 import { CreateProjectInput } from '../dto';
 import { Profile } from '../../profiles/models';
-import { PrismaService } from '../../prisma/prisma.service';
 
 @Resolver(() => Project)
 export class ProjectsRersolver {
   constructor(
     private readonly projectsService: ProjectsService,
-    private readonly prismaService: PrismaService,
+    private readonly profileByIdLoader: ProfileByIdLoader,
   ) {}
 
   @Query(() => [Project], { name: 'projects' })
@@ -35,11 +36,8 @@ export class ProjectsRersolver {
     return this.projectsService.create(data);
   }
 
-  // TODO: Solve N+1 issue
   @ResolveField(() => Profile)
-  profile(@Parent() project: Project) {
-    return this.prismaService.profile.findUnique({
-      where: { id: project.profileId },
-    });
+  profile(@Parent() project: Project, @Context() ctx: object) {
+    return this.profileByIdLoader.load(ctx, project.profileId);
   }
 }

@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Job {
@@ -14,8 +14,8 @@ export class Job {
   @Field()
   dateStart!: Date;
 
-  @Field({ nullable: true })
-  dateEnd?: Date;
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  dateEnd!: Date | null;
 
   @Field()
   achievements!: string;

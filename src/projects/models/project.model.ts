@@ -8,8 +8,8 @@ export class Project {
   @Field()
   name!: string;
 
-  @Field({ nullable: true })
-  link?: string;
+  @Field(() => String, { nullable: true })
+  link!: string | null;
 
   @Field()
   createdAt!: Date;
