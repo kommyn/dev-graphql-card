@@ -3,10 +3,10 @@ import { Module } from '@nestjs/common';
 import { PrismaModule } from '../prisma/prisma.module';
 import { LoadersModule } from '../loaders/loaders.module';
 import { ProfilesService } from './services';
-import { ProfilesResolver } from './resolvers';
+import { ProfileSkillsResolver, ProfilesResolver } from './resolvers';
 
 @Module({
   imports: [PrismaModule, LoadersModule],
-  providers: [ProfilesService, ProfilesResolver],
+  providers: [ProfilesService, ProfilesResolver, ProfileSkillsResolver],
 })
 export class ProfilesModule {}

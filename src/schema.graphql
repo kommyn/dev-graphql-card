@@ -10,6 +10,8 @@ type Profile {
   createdAt: DateTime!
   jobs: [Job!]!
   projects: [Project!]!
+  skills: [Skill!]!
+  allSkills: [Skill!]!
 }
 
 """
@@ -26,6 +28,7 @@ type Job {
   achievements: String!
   createdAt: DateTime!
   profile: Profile!
+  skills: [Skill!]!
 }
 
 type Project {
@@ -36,6 +39,12 @@ type Project {
   profile: Profile!
 }
 
+type Skill {
+  id: ID!
+  name: String!
+  createdAt: DateTime!
+}
+
 type Query {
   profiles: [Profile!]!
   profile(id: String!): Profile
@@ -43,18 +52,31 @@ type Query {
   job(id: String!): Job
   projects: [Project!]!
   project(id: String!): Project
+  skills: [Skill!]!
+  skill(id: String!): Skill!
 }
 
 type Mutation {
   createProfile(data: CreateProfileInput!): Profile!
+  addSkillToProfile(data: ChangeProfileSkillInput!): Profile!
+  removeSkillFromProfile(data: ChangeProfileSkillInput!): Profile!
   createJob(data: CreateJobInput!): Job!
+  addSkillToJob(data: ChangeJobSkillInput!): Job!
+  removeSkillFromJob(data: ChangeJobSkillInput!): Job!
   createProject(data: CreateProjectInput!): Project!
+  createSkill(data: CreateSkillInput!): Skill!
+  deleteSkill(id: String!): Skill!
 }
 
 input CreateProfileInput {
   name: String!
   description: String!
   links: [String!]
+}
+
+input ChangeProfileSkillInput {
+  profileId: ID!
+  skillId: ID!
 }
 
 input CreateJobInput {
@@ -66,8 +88,17 @@ input CreateJobInput {
   profileId: ID!
 }
 
+input ChangeJobSkillInput {
+  jobId: ID!
+  skillId: ID!
+}
+
 input CreateProjectInput {
   name: String!
   link: String
   profileId: String!
+}
+
+input CreateSkillInput {
+  name: String!
 }

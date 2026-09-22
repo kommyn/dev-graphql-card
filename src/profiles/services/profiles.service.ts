@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateProfileInput } from '../dto';
+import { GraphQLError } from 'graphql/error';
 
 @Injectable()
 export class ProfilesService {
@@ -25,5 +26,47 @@ export class ProfilesService {
         links: data.links,
       },
     });
+  }
+
+  async addSkillToProfile(profileId: string, skillId: string) {
+    const existingProfile = await this.prismaService.profile.findUnique({
+      where: { id: profileId },
+    });
+    if (!existingProfile)
+      throw new GraphQLError('Profile does not exists', {
+        extensions: { code: 'NOT_FOUND' },
+      });
+
+    const existingSkill = await this.prismaService.skill.findUnique({
+      where: { id: skillId },
+    });
+    if (!existingSkill)
+      throw new GraphQLError('Skill does not exists', {
+        extensions: { code: 'NOT_FOUND' },
+      });
+
+    return this.prismaService.profile.update({
+      data: {
+        skills: {
+          create: {
+            skill: {
+              connect: { id: skillId },
+            },
+          },
+        },
+      },
+      where: {
+        id: profileId,
+      },
+    });
+  }
+
+  async removeSkillFromProfile(profileId: string, skillId: string) {
+    const result = await this.prismaService.skillsOnProfile.delete({
+      where: { skillId_profileId: { profileId, skillId } },
+      include: { profile: true },
+    });
+
+    return result.profile;
   }
 }

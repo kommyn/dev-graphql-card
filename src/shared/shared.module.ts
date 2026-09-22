@@ -6,6 +6,8 @@ import { join } from 'node:path';
 
 import * as config from './config';
 import { validationSchema } from './validation-schema';
+import { APP_FILTER } from '@nestjs/core';
+import { PrismaExceptionFilter } from './filters';
 
 @Module({
   imports: [
@@ -22,7 +24,38 @@ import { validationSchema } from './validation-schema';
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
       includeStacktraceInErrorResponses: false,
       graphiql: true,
+      formatError: (formatted) => {
+        const ext = formatted.extensions ?? {};
+        const original = ext.originalError as
+          { statusCode?: number; message?: string | string[] } | undefined;
+
+        const code =
+          original?.statusCode === 400
+            ? 'BAD_USER_INPUT'
+            : (ext.code ?? 'INTERNAL_SERVER_ERROR');
+
+        return {
+          message: formatted.message,
+          path: formatted.path,
+          extensions: {
+            code,
+            ...(code === 'BAD_USER_INPUT' && original?.message
+              ? {
+                  details: Array.isArray(original.message)
+                    ? original.message
+                    : [original.message],
+                }
+              : {}),
+          },
+        };
+      },
     }),
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: PrismaExceptionFilter,
+    },
   ],
 })
 export class SharedModule {}

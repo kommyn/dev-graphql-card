@@ -7,6 +7,7 @@ import {
   Parent,
   Context,
 } from '@nestjs/graphql';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 import { Project } from '../models';
 import { ProjectsService } from '../services';
@@ -27,7 +28,7 @@ export class ProjectsRersolver {
   }
 
   @Query(() => Project, { name: 'project', nullable: true })
-  getProject(@Args('id') id: string) {
+  getProject(@Args('id', ParseUUIDPipe) id: string) {
     return this.projectsService.findOne(id);
   }
 
