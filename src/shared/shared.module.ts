@@ -3,6 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'node:path';
+import { maxDepthRule } from '@escape.tech/graphql-armor-max-depth';
+import { maxAliasesRule } from '@escape.tech/graphql-armor-max-aliases';
+import { ValidationRule } from 'graphql';
 
 import * as config from './config';
 import { validationSchema } from './validation-schema';
@@ -22,6 +25,14 @@ import { WriteAccessGuard } from './guards';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      validationRules: [
+        maxDepthRule({
+          n: 5,
+        }) as unknown as ValidationRule,
+        maxAliasesRule({
+          n: 15,
+        }) as unknown as ValidationRule,
+      ],
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
       includeStacktraceInErrorResponses: false,
       graphiql: true,
