@@ -6,8 +6,9 @@ import { join } from 'node:path';
 
 import * as config from './config';
 import { validationSchema } from './validation-schema';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { PrismaExceptionFilter } from './filters';
+import { WriteAccessGuard } from './guards';
 
 @Module({
   imports: [
@@ -55,6 +56,10 @@ import { PrismaExceptionFilter } from './filters';
     {
       provide: APP_FILTER,
       useClass: PrismaExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: WriteAccessGuard,
     },
   ],
 })
