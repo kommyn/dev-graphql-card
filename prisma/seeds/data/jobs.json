@@ -1,0 +1,56 @@
+[
+  {
+    "id": "b30e7f64-2ed5-55ef-bba3-2bf9506b8ad7",
+    "name": "Simple IT",
+    "jobTitle": "Full-stack Developer",
+    "dateStart": "2022-07-01T00:00:00.000Z",
+    "dateEnd": "2026-06-30T00:00:00.000Z",
+    "achievements": "- Разработал бэкенд-решения на базе NestJS и PostgreSQL для пяти продуктов, включая социальную сеть для автолюбителей, платформу для B2B-закупок и систему управления строительными проектами.\n- Реализовал полный цикл разработки продуктов: от проектирования схем баз данных, доменных модулей и API-контрактов до настройки пайплайнов BullMQ, обеспечения безопасности, CI/CD, а также разработки фронтенда и мобильных приложений.\n- Отвечал за основные кодовые базы бэкенда; проводил ревью кода (pull requests) в трех проектах и ​​выполнял релизы в продакшен.\n- Занимался поддержкой и модернизацией унаследованных систем (legacy): рефакторингом крупных монолитных модулей, устранением трудновоспроизводимых сбоев, оптимизацией производительности при высоких нагрузках и устранением уязвимостей безопасности.",
+    "skills": [
+      "PostgreSQL",
+      "HTML",
+      "GraphQL",
+      "WebAssembly",
+      "Node.js",
+      "Next.js",
+      "SQL",
+      "TypeScript",
+      "Front-End Development",
+      "Nginx",
+      "Cascading Style Sheets (CSS)",
+      "NestJS",
+      "REST APIs",
+      "Docker",
+      "React.js",
+      "JavaScript",
+      "React Native",
+      "Full-Stack Development",
+      "Software Development",
+      "Responsive Web Design",
+      "Back-End Web Development",
+      "Web Workers"
+    ]
+  },
+  {
+    "id": "31b87888-186c-5979-994d-59cdf5ee56a3",
+    "name": "Noorsoft",
+    "jobTitle": "Full-stack Developer",
+    "dateStart": "2019-02-01T00:00:00.000Z",
+    "dateEnd": "2022-03-31T00:00:00.000Z",
+    "achievements": "- Реализовывал проекты «под ключ»: веб-приложения, мобильные приложения на React Native и встраиваемые виджеты; разработал универсальный шаблон проекта (starter kit), который использовался в последующих задача.\n- Расширил сферу деятельности с фронтенд-разработки до бэкенда на Node.js / NestJS и serverless-решений; руководил командами до трех разработчиков в рамках нескольких проектов.\n- Работал с унаследованным кодом (legacy): проводил рефакторинг ключевых компонентов и выполнял миграцию с устаревших решений.",
+    "skills": [
+      "Node.js",
+      "Server Side JavaScript",
+      "TypeScript",
+      "Front-End Development",
+      "Firebase",
+      "REST APIs",
+      "React.js",
+      "JavaScript",
+      "React Native",
+      "Software Development",
+      "Responsive Web Design",
+      "Redux"
+    ]
+  }
+]
