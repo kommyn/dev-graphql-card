@@ -19,11 +19,27 @@ export class ProfilesService {
   }
 
   create(data: CreateProfileInput) {
+    const skillNames = data.skills
+      ? [...new Set(data.skills.map((name) => name.trim()).filter(Boolean))]
+      : null;
+
     return this.prismaService.profile.create({
       data: {
         name: data.name,
         description: data.description,
         links: data.links || [],
+        ...(skillNames && {
+          skills: {
+            create: skillNames.map((name) => ({
+              skill: {
+                connectOrCreate: {
+                  where: { name },
+                  create: { name },
+                },
+              },
+            })),
+          },
+        }),
       },
     });
   }
@@ -39,13 +55,35 @@ export class ProfilesService {
 
     if (!Object.keys(data).length) return existingProfile;
 
-    return this.prismaService.profile.update({
-      where: { id },
-      data: {
-        name: data.name,
-        description: data.description,
-        links: data.links || [],
-      },
+    const skillNames = data.skills
+      ? [...new Set(data.skills.map((name) => name.trim()).filter(Boolean))]
+      : null;
+
+    return this.prismaService.$transaction(async (tx) => {
+      if (skillNames) {
+        await tx.skillsOnProfile.deleteMany({ where: { profileId: id } });
+      }
+
+      return tx.profile.update({
+        where: { id },
+        data: {
+          name: data.name,
+          description: data.description,
+          links: data.links || [],
+          ...(skillNames && {
+            skills: {
+              create: skillNames.map((name) => ({
+                skill: {
+                  connectOrCreate: {
+                    where: { name },
+                    create: { name },
+                  },
+                },
+              })),
+            },
+          }),
+        },
+      });
     });
   }
 

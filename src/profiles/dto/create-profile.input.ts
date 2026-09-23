@@ -16,4 +16,10 @@ export class CreateProfileInput {
   @IsArray()
   @IsOptional()
   links?: string[] | null;
+
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  skills?: string[] | null;
 }

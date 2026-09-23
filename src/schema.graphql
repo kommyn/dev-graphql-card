@@ -79,12 +79,14 @@ input CreateProfileInput {
   name: String!
   description: String!
   links: [String!]
+  skills: [String!]
 }
 
 input UpdateProfileInput {
   name: String
   description: String
   links: [String!]
+  skills: [String!]
 }
 
 input ChangeProfileSkillInput {
@@ -99,6 +101,7 @@ input CreateJobInput {
   dateEnd: DateTime
   achievements: String!
   profileId: ID!
+  skills: [String!]
 }
 
 input UpdateJobInput {
@@ -107,6 +110,7 @@ input UpdateJobInput {
   dateStart: DateTime
   dateEnd: DateTime
   achievements: String
+  skills: [String!]
 }
 
 input ChangeJobSkillInput {

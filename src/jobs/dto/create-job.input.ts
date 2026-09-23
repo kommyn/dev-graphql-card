@@ -6,6 +6,7 @@ import {
   IsString,
   IsUUID,
   ValidateBy,
+  IsArray,
 } from 'class-validator';
 
 @InputType()
@@ -49,4 +50,10 @@ export class CreateJobInput {
   @Field(() => ID)
   @IsUUID()
   profileId!: string;
+
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  skills?: string[] | null;
 }

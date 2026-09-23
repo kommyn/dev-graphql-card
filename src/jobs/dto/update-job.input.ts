@@ -5,6 +5,7 @@ import {
   IsDate,
   ValidateIf,
   IsOptional,
+  IsArray,
 } from 'class-validator';
 
 @InputType()
@@ -35,4 +36,10 @@ export class UpdateJobInput {
   @IsString()
   @ValidateIf((_, value) => value !== undefined)
   achievements?: string;
+
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  skills?: string[] | null;
 }

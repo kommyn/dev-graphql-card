@@ -17,6 +17,10 @@ export class JobsService {
   }
 
   create(data: CreateJobInput) {
+    const skillNames = data.skills
+      ? [...new Set(data.skills.map((name) => name.trim()).filter(Boolean))]
+      : null;
+
     return this.prismaService.job.create({
       data: {
         name: data.name,
@@ -25,6 +29,18 @@ export class JobsService {
         dateEnd: data.dateEnd,
         achievements: data.achievements,
         profile: { connect: { id: data.profileId } },
+        ...(skillNames && {
+          skills: {
+            create: skillNames.map((name) => ({
+              skill: {
+                connectOrCreate: {
+                  where: { name },
+                  create: { name },
+                },
+              },
+            })),
+          },
+        }),
       },
     });
   }
@@ -47,9 +63,34 @@ export class JobsService {
       );
     }
 
-    return this.prismaService.job.update({
-      where: { id },
-      data,
+    const { skills, ...jobData } = data;
+
+    const skillNames = skills
+      ? [...new Set(skills.map((name) => name.trim()).filter(Boolean))]
+      : null;
+
+    return this.prismaService.$transaction(async (tx) => {
+      if (skillNames)
+        await tx.skillsOnJobs.deleteMany({ where: { jobId: id } });
+
+      return tx.job.update({
+        where: { id },
+        data: {
+          ...jobData,
+          ...(skillNames && {
+            skills: {
+              create: skillNames.map((name) => ({
+                skill: {
+                  connectOrCreate: {
+                    where: { name },
+                    create: { name },
+                  },
+                },
+              })),
+            },
+          }),
+        },
+      });
     });
   }
 
