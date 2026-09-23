@@ -43,6 +43,7 @@ model Project {
     id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
     name String
     link String?
+    achievements String?
     createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
     profileId String @map("profile_id") @db.Uuid
 

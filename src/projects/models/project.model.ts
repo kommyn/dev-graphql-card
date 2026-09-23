@@ -11,6 +11,9 @@ export class Project {
   @Field(() => String, { nullable: true })
   link!: string | null;
 
+  @Field(() => String, { nullable: true })
+  achievements!: string | null;
+
   @Field()
   createdAt!: Date;
 

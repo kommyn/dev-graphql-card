@@ -21,6 +21,7 @@ export class ProjectsService {
       data: {
         name: data.name,
         link: data.link,
+        achievements: data.achievements,
         profile: { connect: { id: data.profileId } },
       },
     });
@@ -42,6 +43,7 @@ export class ProjectsService {
       data: {
         name: data.name,
         link: data.link,
+        achievements: data.achievements,
       },
     });
   }

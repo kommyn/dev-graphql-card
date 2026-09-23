@@ -35,6 +35,7 @@ type Project {
   id: ID!
   name: String!
   link: String
+  achievements: String
   createdAt: DateTime!
   profile: Profile!
 }
@@ -121,12 +122,14 @@ input ChangeJobSkillInput {
 input CreateProjectInput {
   name: String!
   link: String
+  achievements: String
   profileId: String!
 }
 
 input UpdateProjectInput {
   name: String
   link: String
+  achievements: String
 }
 
 input CreateSkillInput {

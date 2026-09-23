@@ -5,6 +5,8 @@ export async function seedProjects(prisma: PrismaClient, profileId: string) {
   for (const project of data) {
     const attributes = {
       name: project.name,
+      link: project.link,
+      achievements: project.achievements,
       profileId,
     };
 

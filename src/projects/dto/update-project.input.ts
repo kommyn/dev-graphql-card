@@ -13,4 +13,9 @@ export class UpdateProjectInput {
   @IsString()
   @IsOptional()
   link?: string | null;
+
+  @Field(() => String, { nullable: true })
+  @IsString()
+  @IsOptional()
+  achievements?: string | null;
 }
