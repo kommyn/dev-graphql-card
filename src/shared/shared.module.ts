@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { join } from 'node:path';
 import { maxDepthRule } from '@escape.tech/graphql-armor-max-depth';
 import { maxAliasesRule } from '@escape.tech/graphql-armor-max-aliases';
@@ -35,7 +36,9 @@ import { WriteAccessGuard } from './guards';
       ],
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
       includeStacktraceInErrorResponses: false,
-      graphiql: true,
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
+      introspection: true,
       formatError: (formatted) => {
         const ext = formatted.extensions ?? {};
         const original = ext.originalError as
