@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 
 import { PrismaModule } from '../prisma/prisma.module';
-import { ProfileByIdLoader } from './profile-by-id.loader';
-import { JobsByProfileIdLoader } from './jobs-by-profile-id.loader';
-import { ProjectsByProfileIdLoader } from './projects-by-profile-id.loader';
-import { SkillsByProfileId } from './skills-by-profile-id.loader';
-import { SkillsByJobIdLoader } from './skills-by-job-id.loader';
-import { AllProfileSkillsLoader } from './all-profile-skills.loader';
+import { ProfileByIdLoader } from './loaders/profile-by-id.loader';
+import { JobsByProfileIdLoader } from './loaders/jobs-by-profile-id.loader';
+import { ProjectsByProfileIdLoader } from './loaders/projects-by-profile-id.loader';
+import { SkillsByProfileId } from './loaders/skills-by-profile-id.loader';
+import { SkillsByJobIdLoader } from './loaders/skills-by-job-id.loader';
+import { AllProfileSkillsLoader } from './loaders/all-profile-skills.loader';
 
 @Module({
   imports: [PrismaModule],
